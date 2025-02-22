@@ -10,71 +10,107 @@ class CalculatorUI extends StatefulWidget
 
 class _CalculatorUIState extends State<CalculatorUI> 
 {
+  final peso = TextEditingController();
+  final estatura = TextEditingController();
+
+  String pso = '0';
+  String est = '0';
+
+  double resultado = 0;
+  
+  String respuesta = '';
   @override
   Widget build(BuildContext context)
   {
-    return Scaffold(
+    return Scaffold
+    (
       appBar:AppBar
       (
-        title: Center(child: Text('Mi calculadora IMC')),
+        title: Center(child: Text('calculadora IMC')),
       ),
 
-      body: SingleChildScrollView
+      body: Center
       (
         child:Column
         (
           children: 
           [
+            Padding(padding: EdgeInsets.symmetric(vertical: 50.0),),
             TextFormField
             (
+              controller: peso,
 
-              keyboardType: TextInputType.numberWithOptions(),
-
-              validator: (value) 
-              {
-                if (value!.isEmpty) 
-                {
-                  return 'Escribe tu peso';
-                }
-                  return null;
-              },
+              keyboardType: TextInputType.number,
 
               decoration: InputDecoration
               (
-                label: Text ('ingrese su peso'),
-                
+                border: OutlineInputBorder(),
+                label: Text('ingrese su peso en kg'),
               )
             ),
 
+            Padding(padding: EdgeInsets.symmetric(vertical: 20.0)),
+            
             TextFormField
             (
-              keyboardType: TextInputType.numberWithOptions(),
-              validator: (value)
-              {
-                if (value!.isEmpty)
-                {
-                  return 'Escribe tu estatura';
-                }
-                  return null;
-              },
+              controller: estatura,
 
+              keyboardType: TextInputType.number,
+              
               decoration: InputDecoration
               (
-                label: Text('ingrese su estatura')
+                border: OutlineInputBorder(),
+                label: Text('ingrese su estatura en cm'),
               )
             ),
 
-            ElevatedButton(onPressed: , child: Text('calcular'))
+            Padding(padding: EdgeInsets.symmetric(vertical: 50.0)),
 
+            ElevatedButton(onPressed: calcular, child: Text('calcular')),
+            if(respuesta.isNotEmpty)
+              Text('su IMC es: '),
+              Text(respuesta),
           ],
-        )
+        ),
       ),
     ); 
   }
 
   void calcular()
   {
+    setState(() 
+    {
+        
+        pso = peso.text;
+        est = estatura.text;
+        
+      if(pso.isNotEmpty && est.isNotEmpty)
+      {
+        double pes = double.parse(pso);
+        double esta = double.parse(est);
 
+        if(pes > 0 && esta > 0)
+        {
+          resultado = (pes/((esta/100)*(esta/100)));
+          respuesta = resultado.toStringAsFixed(2);
+        }
+        else
+        {
+          respuesta =  'los datos ingresados no son validos';
+        }
+
+      }
+      else
+      {
+        respuesta = 'por favor ingrese todos los datos';
+      }
+
+
+      
+
+    //peso.text = '';
+    //estatura.text = '';
+    }
+  );
   }
-  
 }
